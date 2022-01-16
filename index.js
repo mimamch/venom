@@ -21,15 +21,41 @@ venom
 
 function start(client) {
   client.onMessage((message) => {
-    if (message.body === "Hi" && message.isGroupMsg === false) {
-      client
-        .sendText(message.from, "Welcome Venom 🕷")
-        .then((result) => {
-          console.log("Result: ", result); //return object success
-        })
-        .catch((erro) => {
-          console.error("Error when sending: ", erro); //return object error
-        });
-    }
+    commandHandler(client, message);
+
+    // if (message.body === "Hi" && message.isGroupMsg === false) {
+    //   client
+    //     .sendText(message.from, "Welcome Venom 🕷")
+    //     .then((result) => {
+    //       console.log("Result: ", result); //return object success
+    //     })
+    //     .catch((erro) => {
+    //       console.error("Error when sending: ", erro); //return object error
+    //     });
+    // }
   });
 }
+
+const commandHandler = async (client, message) => {
+  if (message.isGroupMsg && classGroupId !== message.from) return;
+  if (message.type !== "chat" && message.type !== "image") return;
+
+  let msg = message.type == "image" ? message.caption : message.body;
+
+  command.forEach((cmd) => {
+    if (cmd.script == msg.toLowerCase()) {
+      cmd.func(client, message);
+    }
+  });
+};
+
+const command = [
+  {
+    script: "ping",
+    func: async (client, message) => {
+      await client
+        .sendText(message.from, "PONG!!!")
+        .then((res) => console.log("result : ", res));
+    },
+  },
+];
