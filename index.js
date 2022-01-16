@@ -36,38 +36,47 @@ function start(client) {
   });
 }
 
-const commandHandler = async (client, message) => {
-  if (message.isGroupMsg && classGroupId !== message.from) return;
-  if (message.type !== "chat" && message.type !== "image") return;
-
-  let msg = message.type == "image" ? message.caption : message.body;
-
-  command.forEach((cmd) => {
-    if (cmd.script == msg.toLowerCase()) {
-      cmd.func(client, message);
-    }
-  });
-};
-
 const command = [
   {
     script: "ping",
     func: async (client, message) => {
-      await client
-        .sendText(message.from, "PONG!!!")
-        .then((res) => console.log("result : ", res));
+      try {
+        await client
+          .sendText(message.from, "PONG!!!")
+          .then((res) => console.log("result : ", res));
+      } catch (error) {
+        console.log("error :", error);
+      }
     },
   },
   {
     script: "#stiker",
     func: async (client, message) => {
-      if (message.type !== "image") return;
+      try {
+        if (message.type !== "image") return;
 
-      const mimetype = message.mimetype;
-      const data = await client.decryptFile(message);
+        const mimetype = message.mimetype;
+        const data = await client.decryptFile(message);
 
-      const base64 = `data:${mimetype};base64,${data.toString("base64")}`;
-      await client.sendImageAsSticker(message.from, base64);
+        const base64 = `data:${mimetype};base64,${data.toString("base64")}`;
+        await client.sendImageAsSticker(message.from, base64);
+      } catch (error) {
+        console.log("error :", error);
+      }
     },
   },
 ];
+
+const commandHandler = async (client, message) => {
+  if (message.isGroupMsg && classGroupId !== message.from) return;
+  if (message.type !== "chat" && message.type !== "image") return;
+
+  let originalMsg = message.type == "image" ? message.caption : message.body;
+  let msg = originalMsg.toLowerCase();
+
+  command.forEach(async (cmd) => {
+    if (cmd.script === msg) {
+      await cmd.func(client, message);
+    }
+  });
+};
