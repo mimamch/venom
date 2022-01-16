@@ -58,4 +58,16 @@ const command = [
         .then((res) => console.log("result : ", res));
     },
   },
+  {
+    script: "#stiker",
+    func: async (client, message) => {
+      if (message.type !== "image") return;
+
+      const mimetype = message.mimetype;
+      const data = await client.decryptFile(message);
+
+      const base64 = `data:${mimetype};base64,${data.toString("base64")}`;
+      await client.sendImageAsSticker(message.from, base64);
+    },
+  },
 ];
