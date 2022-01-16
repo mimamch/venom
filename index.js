@@ -4,6 +4,15 @@ venom
   .create({
     session: "mimamch", //name of session
     multidevice: true, // for version not multidevice use false.(default: true)
+    chromiumArgs: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--aggressive-cache-discard",
+      "--disable-cache",
+      "--disable-application-cache",
+      "--disable-offline-load-stale-cache",
+      "--disk-cache-size=0",
+    ],
   })
   .then((client) => start(client))
   .catch((erro) => {
