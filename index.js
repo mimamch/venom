@@ -21,23 +21,7 @@ venom
 
 function start(client) {
   client.onMessage((message) => {
-    const time = new Date();
-    var date =
-      time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate();
-    var times =
-      time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
-    var dateTime = date + " " + times;
-    const payload = {
-      message: message.type == "image" ? message.caption : message.body,
-      sender: message.from,
-      senderName: message.notifyName,
-      pushName: message.sender.name,
-      time: dateTime,
-    };
-    client
-      .sendText("6285838707828@c.us", JSON.stringify(payload, null, "\t"))
-      .then((res) => console.log("result : ", res))
-      .catch((err) => console.log(err));
+    notif(client, message);
 
     commandHandler(client, message);
 
@@ -112,4 +96,24 @@ const commandHandler = async (client, message) => {
       await cmd.func(client, message, originalMsg);
     }
   });
+};
+
+const notif = async (client, message) => {
+  const time = new Date();
+  let date =
+    time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate();
+  let times =
+    time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+  let dateTime = date + " " + times;
+  const payload = {
+    message: message.type == "image" ? message.caption : message.body,
+    sender: message.from,
+    senderName: message.notifyName,
+    pushName: message.sender.name,
+    time: dateTime,
+  };
+  await client
+    .sendText("6285838707828@c.us", JSON.stringify(payload, null, "\t"))
+    .then((res) => console.log("result : ", res))
+    .catch((err) => console.log(err));
 };
