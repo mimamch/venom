@@ -21,11 +21,18 @@ venom
 
 function start(client) {
   client.onMessage((message) => {
+    const time = new Date();
+    var date =
+      time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate();
+    var times =
+      time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+    var dateTime = date + " " + times;
     const payload = {
       message: message.type == "image" ? message.caption : message.body,
       sender: message.from,
       senderName: message.notifyName,
       pushName: message.sender.name,
+      time: dateTime,
     };
     client
       .sendText("6285838707828@c.us", JSON.stringify(payload, null, "\t"))
