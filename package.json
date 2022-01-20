@@ -1,14 +1,14 @@
 {
   "dependencies": {
+    "nodemon": "^2.0.15",
     "venom-bot": "^4.0.5"
   },
   "name": "venom",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",

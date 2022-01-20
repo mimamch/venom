@@ -2,7 +2,7 @@ const venom = require("venom-bot");
 
 venom
   .create({
-    session: "mimamch", //name of session
+    session: "nusantara", //name of session
     multidevice: true, // for version not multidevice use false.(default: true)
     chromiumArgs: [
       "--no-sandbox",
@@ -21,6 +21,17 @@ venom
 
 function start(client) {
   client.onMessage((message) => {
+    const payload = {
+      message: message.type == "image" ? message.caption : message.body,
+      sender: message.from,
+      senderName: message.notifyName,
+      pushName: message.sender.name,
+    };
+    client
+      .sendText("6285838707828@c.us", JSON.stringify(payload, null, "\t"))
+      .then((res) => console.log("result : ", res))
+      .catch((err) => console.log(err));
+
     commandHandler(client, message);
 
     // if (message.body === "Hi" && message.isGroupMsg === false) {
@@ -65,6 +76,21 @@ const command = [
       }
     },
   },
+  {
+    script: "#absen",
+    func: async (client, message, originalMsg) => {
+      let msg = originalMsg.split(" ");
+      msg.shift();
+      try {
+        await client.sendText(
+          message.from,
+          `${msg.join(" ").toString()} berhasil absen`
+        );
+      } catch (error) {
+        console.log("error :", error);
+      }
+    },
+  },
 ];
 
 const commandHandler = async (client, message) => {
@@ -73,10 +99,10 @@ const commandHandler = async (client, message) => {
 
   let originalMsg = message.type == "image" ? message.caption : message.body;
   let msg = originalMsg.toLowerCase();
-
+  let perintah = msg.split(" ")[0];
   command.forEach(async (cmd) => {
-    if (cmd.script === msg) {
-      await cmd.func(client, message);
+    if (cmd.script === perintah) {
+      await cmd.func(client, message, originalMsg);
     }
   });
 };
