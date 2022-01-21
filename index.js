@@ -99,22 +99,14 @@ const commandHandler = async (client, message) => {
 };
 
 const notif = async (client, message) => {
-<<<<<<< HEAD
   if (message.isGroupMsg && classGroupId !== message.from) return;
   if (message.type !== "chat" && message.type !== "image") return;
 
-=======
-  
->>>>>>> 0d745bf477da60649f3da92a372fbaa5d752bce5
   const payload = {
     message: message.type == "image" ? message.caption : message.body,
     sender: message.from,
     senderName: message.notifyName,
     pushName: message.sender.name,
-<<<<<<< HEAD
-=======
-    
->>>>>>> 0d745bf477da60649f3da92a372fbaa5d752bce5
   };
   await client
     .sendText("6285838707828@c.us", JSON.stringify(payload, null, "\t"))
