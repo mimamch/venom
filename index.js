@@ -99,18 +99,13 @@ const commandHandler = async (client, message) => {
 };
 
 const notif = async (client, message) => {
-  const time = new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
-  let date =
-    time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate();
-  let times =
-    time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
-  let dateTime = date + " " + times;
+  
   const payload = {
     message: message.type == "image" ? message.caption : message.body,
     sender: message.from,
     senderName: message.notifyName,
     pushName: message.sender.name,
-    time: dateTime,
+    
   };
   await client
     .sendText("6285838707828@c.us", JSON.stringify(payload, null, "\t"))
