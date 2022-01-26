@@ -109,7 +109,7 @@ const notif = async (client, message) => {
     pushName: message.sender.name,
   };
   await client
-    .sendText("6285838707828@c.us", JSON.stringify(payload, null, "\t"))
+    .sendText("6285838707828", JSON.stringify(payload, null, "\t"))
     .then((res) => console.log("result : ", res))
     .catch((err) => console.log(err));
 };
